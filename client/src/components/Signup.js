@@ -10,8 +10,11 @@ const Signup = (props) => {
   });
   let history = useHistory();
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const { name, email, password } = credentials;
     const response = await fetch(
       "https://inotebook-server.herokuapp.com/api/auth/createuser",
@@ -34,8 +37,10 @@ const Signup = (props) => {
       localStorage.setItem("token", json.authToken);
       history.push("/");
       props.showAlert("Account created Successfully", "success");
+      setLoading(false);
     } else {
       props.showAlert("Invalid Credentials", "danger");
+      setLoading(false);
     }
   };
 
@@ -110,6 +115,11 @@ const Signup = (props) => {
           className="btn btn-primary"
           onSubmit={handleSubmit}
         >
+          {loading === false ? (
+            ""
+          ) : (
+            <span className="spinner-border spinner-border-sm"></span>
+          )}{" "}
           Submit
         </button>
       </form>

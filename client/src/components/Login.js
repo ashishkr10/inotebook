@@ -5,8 +5,11 @@ const Login = (props) => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   let history = useHistory();
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const response = await fetch(
       "https://inotebook-server.herokuapp.com/api/auth/login",
       {
@@ -27,8 +30,10 @@ const Login = (props) => {
       localStorage.setItem("token", json.authToken);
       props.showAlert("You login Successfully", "success");
       history.push("/");
+      setLoading(false);
     } else {
       props.showAlert("Invalid Details", "danger");
+      setLoading(false);
     }
   };
 
@@ -39,6 +44,7 @@ const Login = (props) => {
   return (
     <div className="container mt-3">
       <h2 className="my-4">Login to iNotebook</h2>
+      {/* <form> */}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
@@ -69,6 +75,11 @@ const Login = (props) => {
         </div>
 
         <button type="submit" className="btn btn-primary">
+          {loading === false ? (
+            ""
+          ) : (
+            <span className="spinner-border spinner-border-sm"></span>
+          )}{" "}
           Submit
         </button>
       </form>
